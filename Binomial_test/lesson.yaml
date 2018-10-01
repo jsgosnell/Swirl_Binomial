@@ -84,7 +84,7 @@
   Hint: After you install the package, use library(binom) to load it.
 
 - Class: cmd_question
-  Output: 'Now get the confidence interval for our data.  You can check the arguments (?binom.confint), but they are the same as the binom.test: x = number of successes, n = number of trials). The default confidence interval level is .05, which is good for now).'
+  Output: 'Now get the confidence interval for our data.  You can check the arguments (?binom.confint), but they are the same as the binom.test: x = number of successes, n = number of trials). The default confidence interval level is .95, which is good for now).'
   CorrectAnswer: binom.confint(15,17)
   AnswerTests: omnitest(correctExpr='binom.confint(15,17)')
   Hint: Try binom.confint(x =15,  n = 17)
@@ -114,7 +114,7 @@
   Hint: Remember, we are 100% certain the paramter is between 0 and 1. As we become less certain (confident) our interval should get smaller (and smaller).  
 
 - Class: cmd_question
-  Output: Great. Now prove to yourself by changing the conf.level argument in the binom.test function.
+  Output: Great. Now prove to yourself by changing the conf.level argument in the binom.confint function.
   CorrectAnswer: binom.confint(15,17, conf.level = .9)
   AnswerTests: omnitest(correctExpr='binom.confint(15,17, conf.level = .9)')
   Hint: Try binom.confint(15,17, conf.level = .90)
