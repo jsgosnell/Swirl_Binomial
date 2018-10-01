@@ -1,0 +1,125 @@
+- Class: meta
+  Course: CUNY-Biostats_Swirl
+  Lesson: Binomial test
+  Author: J. Stephen Gosnell
+  Type: Standard
+  Organization: Baruch College, City University of Work
+  Version: 2.4.3
+
+- Class: text
+  Output: Welcome to Swirl! This interface will help review some of the code we've used in class.
+
+- Class: text
+  Output: Today we'll review the binomial test.
+
+- Class: text
+  Output: 'In addition to the Bufo bufo (frog) example from class, Bisazza et al (1996) also tested Bufo marinus (another species).  One test was to see which way they turned if placed upside-down while underwater (ever see Zoolander?).  In one of their experiments 15 frogs were labelled "right-pawed" and 2 were labelled "left-pawed" based on the way they typically rolled.'
+
+- Class: exact_question
+  Output: To analyze this data, we first set null and alternative hypotheses.  If we assume there is no overall limb -reference in frogs, what proportion of frogs would we expect to see use their right paw?
+  CorrectAnswer: .5
+  AnswerTests: omnitest(correctVal = .5)
+  Hint: Not quite.  This is just like our coins from the first day of class - if a coin is fair, what proportion of flips do we expect to end with heads?  
+
+- Class: text
+  Output: That's right! It's also our null hypothesis (H0). Half (.5) of our frogs should be right-pawed by chance.
+
+- Class: text
+  Output: That means our alternative hypothesis (assuming a two-tailed test) is that the proportion of frogs that are right-handed is not equal to .5!
+
+- Class: cmd_question
+  Output: To analyze this data, we can use the binom.test function since its discrete data that only falls into two categories.  You can remind yourself about the arguments using ?binom.test.  Analyze the data now.  
+  CorrectAnswer: binom.test (x = 15, n = 17, p = .5)
+  AnswerTests: omnitest(correctExpr='binom.test(15,17,p=.5)')
+  Hint: To analyze the data, we use binom.test(x = 15, n = 17, p = .5). The x argument is the number of successes, n is the sample size, and p is the null hypothesis.
+
+- Class: mult_question
+  Output: Great job using the function. Now look at the output and find the p-value. Using it, do we reject or fail to reject the null hypothesis (assume an alpha level of .05)?
+  AnswerChoices: reject; fail to reject; not sure
+  CorrectAnswer: reject
+  AnswerTests: omnitest(correctVal='reject')
+  Hint: If the p-value is less than .05 (the pre-set alpha level), we reject the null hypothesis. This means we would expect an outcome like we observed or more extreme only 1 time out of 20 (on average) if the null hypothesis were true, so it's unlikely!
+
+- Class: text
+  Output: Great job. Remember, if the p-value is less than .05 (the pre-set alpha level), we reject the null hypothesis. This means we would expect an outcome like we observed or more extreme only 1 time out of 20 (on average) if the null hypothesis were true, so it's unlikely!
+
+- Class: cmd_question
+  Output: We can add a few more wrinkles to the binom.test function.  First, the default null hypothesis value for p (parameter of binomial distribution, not p-value) is .5, but we can change that.  What if we had previous data that suggested Bufo marinus should be right-handed 67% of the time and we used that to determine our null hypothesis.  Use the binom.test function to test that hypothesis.    
+  CorrectAnswer: binom.test(15,17,.75)
+  AnswerTests: omnitest(correctExpr='binom.test(15,17,.67)')
+  Hint: Not quite. Remember, the x argument is the number of successes, n is the sample size, and p is the null hypothesis.
+
+- Class: mult_question
+  Output: 'Great job.  We change the null hypothesis value by changing the p argument in the binom.test function.  Now do we reject or fail to reject the null hypothesis (HO: the proportion of right-handed frogs is .67) at an alpha = .05 level?'
+  AnswerChoices: reject; fail to reject; not sure
+  CorrectAnswer: fail to reject
+  AnswerTests: omnitest(correctVal='fail to reject')
+  Hint: If the p-value is greater than .05 (the pre-set alpha level), we fail to reject the null hypothesis. This means we would expect an outcome like we observed or more extreme more than 1 time out of 20 (on average) if the null hypothesis were true, so it's likely!
+
+
+- Class: text
+  Output: Great job. We now fail to reject the null hypothesis.  
+
+- Class: cmd_question
+  Output: 'We can also run a sided-test with the binom.test function. Remember, that means we only care about one side of the distribution. For example, what if we only cared if frogs were right-handed more than 67% of the time.  Our null hypothesis (HO) is that the proportion of right-handed frog is less than or equal to .67, and our alternative is that the proportion of right-handed frogs is greater than .67. The binom.test function has a alternative argument that defaults to a "two-sided" test, but we can change it to "greater" or "less".  Analyze our data (15 right-handed frogs out of 17 sampled) to see what it tells us about our "sided" analysis (input the function below).'
+  CorrectAnswer: binom.test(15,17, .67, alternative = "greater")
+  AnswerTests: omnitest(correctExpr='binom.test(15,17, .67, alternative = "greater")')
+  Hint: 'Not quite. Try binom.test(15,17, .67, alternative = "greater")'
+
+- Class: mult_question
+  Output: Notice the output notes the alternative hypothesis is that the true probabilty of success is greater than .67 (a sided test!). Now do we reject or fail to reject the null hypothesis at an alpha = .05 level?
+  AnswerChoices: reject; fail to reject; not sure
+  CorrectAnswer: reject
+  AnswerTests: omnitest(correctVal='reject')
+  Hint: If the p-value is less than .05 (the pre-set alpha level), we reject the null hypothesis. This means we would expect an outcome like we observed or more extreme only 1 time out of 20 (on average) if the null hypothesis were true, so it's unlikely!
+
+
+- Class: text
+  Output: Correct. Now you see how a sided-test changes your decision in regards to the null! Same data but we can reject a null with a sided-test but not with a two-tailed approach.
+
+- Class: cmd_question
+  Output: Our final issue with binomial data is constructing confidence intervals. The default intervals provided in the binom.test function are not approprate if p (binomial proportion) is extreme. Instead, we can use the binom.confint function from the binom package to get the Agresti-Coul intervals.  First, load the binom package (you may need to install it!) Use the library function, not require!
+  CorrectAnswer: library(binom)
+  AnswerTests: omnitest(correctExpr='library(binom)')
+  Hint: After you install the package, use library(binom) to load it.
+
+- Class: cmd_question
+  Output: 'Now get the confidence interval for our data.  You can check the arguments (?binom.confint), but they are the same as the binom.test: x = number of successes, n = number of trials). The default confidence interval level is .05, which is good for now).'
+  CorrectAnswer: binom.confint(15,17)
+  AnswerTests: omnitest(correctExpr='binom.confint(15,17)')
+  Hint: Try binom.confint(x =15,  n = 17)
+
+- Class: mult_question
+  Output: Great. Now check the output for the agresti-coul method. What is the lower bound?
+  AnswerChoices: .644; .729; .706
+  CorrectAnswer: .644
+  AnswerTests: omnitest(correctVal='.644')
+  Hint: Look for the agresti-coul method, then check the "lower" column.
+
+- Class: mult_question
+  Output: Great, you found it. Now what's the upper bound for the confidence interval?
+  AnswerChoices: .980; 1.03; .987
+  CorrectAnswer: .980
+  AnswerTests: omnitest(correctVal='.980')
+  Hint: Look for the agresti-coul method, then check the "upper" column.
+
+- Class: text
+  Output: Great! Remember the confidence interval requres a lower and upper bound!  Also note this interval includes .67, which is why we couldn't reject the hypothesis in our two-tailed test.  
+
+- Class: mult_question
+  Output: Also remember we can change the confidence interval level. If we instead made a 90% confidence interval, would the total range be larger or smaller?
+  AnswerChoices: smaller;larger;I don't know
+  CorrectAnswer: smaller
+  AnswerTests: omnitest(correctVal='smaller')
+  Hint: Remember, we are 100% certain the paramter is between 0 and 1. As we become less certain (confident) our interval should get smaller (and smaller).  
+
+- Class: cmd_question
+  Output: Great. Now prove to yourself by changing the conf.level argument in the binom.test function.
+  CorrectAnswer: binom.confint(15,17, conf.level = .9)
+  AnswerTests: omnitest(correctExpr='binom.confint(15,17, conf.level = .9)')
+  Hint: Try binom.confint(15,17, conf.level = .90)
+
+- Class: text
+  Output: Great! This concludes our binomial lesson. You should be ready to do the assignment now!
+
+
